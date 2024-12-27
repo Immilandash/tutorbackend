@@ -5,11 +5,10 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, enum: ['tutor', 'student'], required: true },
-    subjects: { type: [String], required: true },
     location: {
         type: {
-            type: String,
-            enum: ['Point'], // GeoJSON format
+            type: String, // Must be 'Point'
+            enum: ['Point'],
             required: true,
         },
         coordinates: {
@@ -17,10 +16,9 @@ const userSchema = new mongoose.Schema({
             required: true,
         },
     },
+    subjects: { type: [String], default: [] },
 });
 
-userSchema.index({ location: '2dsphere' }); // Index for geospatial queries
+userSchema.index({ location: '2dsphere' }); // Add geospatial index
 
-const User = mongoose.model('User', userSchema);
-
-module.exports = User;
+module.exports = mongoose.model('User', userSchema);
