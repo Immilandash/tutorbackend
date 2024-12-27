@@ -4,7 +4,7 @@ services:
     env: node
     region: oregon # Choose the appropriate region for your app
     buildCommand: npm install
-    startCommand: npm start
+    startCommand: node server.js
     envVars:
       - key: MONGO_URI
         value: mongodb+srv://immilankumar01:thedash@cluster0.3kddd.mongodb.net/tutor?retryWrites=true
