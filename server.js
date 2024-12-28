@@ -9,7 +9,11 @@ connectDB();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: '*', // Allow all origins (you can restrict it to your Flutter app's domain if needed)
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'], // Specify allowed HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Include Authorization for JWT
+  }));
 
 // Routes
 app.use('/api/auth', require('./routers/authRoutes'));
