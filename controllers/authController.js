@@ -1,8 +1,10 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/userModel');
-
 const axios = require('axios');
+const multer = require('multer');
+const path = require('path');
+
 
 exports.signup = async (req, res) => {
     const { name, email, password, role, location, subjects } = req.body;
@@ -39,6 +41,11 @@ exports.signup = async (req, res) => {
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
+
+        //  Store profile picture path if uploaded
+        const profilePhoto = req.file ? `/uploads/${req.file.filename}` : '';
+
+
         // Create user
         const newUser = new User({
             name,
@@ -47,6 +54,7 @@ exports.signup = async (req, res) => {
             role,
             location: geoLocation, // Store as GeoJSON
             subjects: role === 'tutor' ? subjects : [],
+            profilePhoto,
         });
 
         await newUser.save();
@@ -57,6 +65,7 @@ exports.signup = async (req, res) => {
         res.status(500).json({ error: 'Internal server error', details: error.message });
     }
 };
+
 
 
 exports.login = async (req, res) => {
@@ -118,5 +127,7 @@ exports.logout = (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+
 
 
